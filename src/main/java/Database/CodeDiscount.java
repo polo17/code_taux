@@ -11,17 +11,17 @@ package Database;
  */
 public class CodeDiscount {
     
-    private char code;
+    private String code;
     private float rate;
     
-    public CodeDiscount(char code, float rate){
+    public CodeDiscount(String code, float rate){
         
         this.code=code;
         this.rate=rate;
         
     }
     
-    public char getCode() {
+    public String getCode() {
         return this.code;
     }
     

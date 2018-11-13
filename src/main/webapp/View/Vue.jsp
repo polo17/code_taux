@@ -22,7 +22,7 @@
             Taux : 
             <input name="taux" step="0.01" min="0.0" max="99.99" size="5" type="number" >
             <br>
-            <input name=action" value="ADD" type="hidden">
+            <input name="action" value="ADD" type="hidden">
             <input value="Ajouter" type="submit">
         </form>
         
@@ -35,11 +35,11 @@
                 </tr>
                 <c:forEach var="Listdiscount" items="${Listdiscount}">
                     <tr>
-                        <td>${Listdiscount.getCode()}</td>
+                        <td>${Listdiscount.code}</td>
                         <td>${Listdiscount.rate}</td>
-                        <td> <a href="?action=DELETE&code=H">delete</a> </td>
+                        <td> <a href="?action=DELETE&code=${Listdiscount.code}">delete</a> </td>
                     </tr>    
-                    </c:forEach>
+                </c:forEach>
 
 
             </tbody>

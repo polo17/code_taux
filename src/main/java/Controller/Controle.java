@@ -10,9 +10,7 @@ import Database.DAO;
 import Database.DataSourceFactory;
 import java.util.List;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -38,13 +36,39 @@ public class Controle extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
-        response.setContentType("text/html;charset=UTF-8");
-        
-        DAO dao = new DAO(DataSourceFactory.getDataSource());       
-        List<CodeDiscount> discou = dao.getAllDiscountCode();      
-        request.setAttribute("Listdiscount", discou);
-        request.getRequestDispatcher("View/Vue.jsp").forward(request, response);
+            throws ServletException, IOException, SQLException, Exception {
+
+            DAO dao = new DAO(DataSourceFactory.getDataSource());       
+             
+
+
+            String code = request.getParameter("code");
+            String rate = request.getParameter("rate");
+            String action = request.getParameter("action");
+            //String erreur = "";
+            
+            
+            //float rate = request.getParameter("rate");
+            if ("ADD".equals(action)){
+                try {
+                    dao.createDiscount(code, Float.parseFloat(rate));
+                } catch(Exception e) {
+                    dao.updateDiscount_Code(code, Float.parseFloat(rate));
+                }
+            }
+            /*
+             if ("DELETE".equals(action)){
+                try {dao.deleteDiscount(code.charAt(0)); }
+                catch (Exception e) {
+                    erreur = "Impossible de supprimer" + code + ", ce code est déjà utilisé.";
+                }
+            }   
+            */
+             List<CodeDiscount> discou = dao.getAllDiscountCode();     
+            //request.setAttribute("erreur", erreur);
+            request.setAttribute("Listdiscount", discou);
+            request.getRequestDispatcher("View/Vue.jsp").forward(request, response);
+ 
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -63,6 +87,8 @@ public class Controle extends HttpServlet {
             processRequest(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(Controle.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Controle.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -80,6 +106,8 @@ public class Controle extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
+            Logger.getLogger(Controle.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(Controle.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
